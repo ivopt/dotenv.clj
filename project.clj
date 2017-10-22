@@ -1,7 +1,7 @@
 (defproject lynxeyes/dotenv "1.0.0"
   :author "Ivo Jesus"
   :description "Loads environment variables from .env files along with existing environment"
-  :url "http://example.com/FIXME"
+  :url "https://github.com/LynxEyes/dotenv.clj"
   :license {:name "MIT"
             :url "https://opensource.org/licenses/MIT"}
   :dependencies [
