@@ -1,6 +1,7 @@
 # dotenv
 
 A Clojure library designed to load environment variables.
+This was born out of the frustration of using existing libraries and from the fact that I find it less than ideal to introduce a new standard regarding env files.
 
 It loads them from (by order of priority):
 
@@ -9,16 +10,53 @@ It loads them from (by order of priority):
 * Properties
 * System Environment Variables
 
+## Where to put your env vars?
 
-This was born out of the frustration of using existing libraries and from the fact that I find it less than ideal to introduce a new standard regarding env files.
+Dotenv will pull env vars from your system and property files as expected.  
+Also, it will pull env vars from local `.env` file.  
+Now, if you need "app environment" specific env vars, you can create "app environment specific env files" such as:
 
+* .env.development
+* .env.test
+
+And they will be loaded if your app is running on any of those environments.
+
+But, how do you set your app environment?  
+You simply set `APP_ENV` on either your system, your command or on `.env`
+
+
+Example:
+
+If you set your `.env` with:
+
+```
+APP_ENV=dev
+SOME_VAR=DotEnvValue
+```
+
+and you have a `.env.dev` file with:
+
+```
+NEW_VAR=123
+SOME_VAR=DotEnvDotDevValue
+```
+
+within your app, you'll have the following env vars (among System defined env vars):
+
+```
+APP_ENV=dev
+NEW_VAR=123
+SOME_VAR=DotEnvDotDevValue
+```
+
+Notice how `SOME_VAR` is overriden.
 
 ## Install
 
 Add the dependency to you `project.clj`:
 
 ```clojure
-:dependencies [[lynxeyes/dotenv "1.0.0"]]
+:dependencies [[lynxeyes/dotenv "1.0.1"]]
 ```
 
 and `lein deps`!
