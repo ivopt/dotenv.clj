@@ -3,19 +3,6 @@
              [clojure.java.io :as io]
              [clojure.core.strint :refer [<<]]))
 
-(def app-env-vars ["APP_ENV" "LEIN_ENV" "BOOT_ENV"])
-
-(def app-env
-  (or
-    (->> app-env-vars
-         (map #(System/getenv %))
-         (filter some?)
-         (first))
-    "development"))
-
-(def local-env-files
-  (filter #(.exists (io/file %)) [".env" (<< ".env.~{app-env}")]))
-
 (defn- to-pairs [rawstring]
   "converts a string containing the contents of a .env file into a list of pairs"
   (let [lines (str/split-lines rawstring)]
@@ -28,15 +15,31 @@
        to-pairs
        (into {}) ))
 
-; Loads local env...
-(def local-env
-  (->> local-env-files
-       (map load-env-file)
-       (into {}) ))
+(def base-env
+  (into {} [
+            (System/getenv)
+            (System/getProperties)
+            (load-env-file ".env")
+           ]))
 
-(def env-sources [local-env (System/getenv) (System/getProperties)])
+(def app-env-vars ["APP_ENV" "LEIN_ENV" "BOOT_ENV"])
+(def app-env
+  (or
+    (->> app-env-vars
+         (map #(base-env %))
+         (filter some?)
+         (first))
+    "development"))
 
-(defn- load-env [] (into {} env-sources))
+(def app-env-specific-filenames
+  (filter #(.exists (io/file %)) [(<< ".env.~{app-env}")]))
 
-(def env (load-env))
-(defn env-key [kw] (env (name kw)))
+(def app-env-specific-env
+  (into {} (map load-env-file app-env-specific-filenames)))
+
+(def extended-env
+  (into {} [base-env app-env-specific-env]))
+
+(defn env
+  ([] extended-env)
+  ([k] (extended-env (name k))))
