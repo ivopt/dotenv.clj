@@ -1,6 +1,10 @@
-(defproject dotenv "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
+(defproject lynxeyes/dotenv "0.0.1"
+  :author "Ivo Jesus"
+  :description "Loads environment variables from .env files along with existing environment"
   :url "http://example.com/FIXME"
-  :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.8.0"]])
+  :license {:name "MIT"
+            :url "https://opensource.org/licenses/MIT"}
+  :dependencies [
+                 [org.clojure/clojure "1.8.0"]
+                 [org.clojure/core.incubator "0.1.4"]
+                ])
