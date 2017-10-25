@@ -1,4 +1,4 @@
-(defproject lynxeyes/dotenv "1.0.1"
+(defproject lynxeyes/dotenv "1.0.2"
   :author "Ivo Jesus"
   :description "Loads environment variables from .env files along with existing environment"
   :url "https://github.com/LynxEyes/dotenv.clj"

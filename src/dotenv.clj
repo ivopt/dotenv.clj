@@ -10,10 +10,12 @@
 
 (defn- load-env-file [filename]
   "loads an env file into a map"
-  (->> filename
-       slurp
-       to-pairs
-       (into {}) ))
+  (if (.exists (io/as-file filename))
+    (->> filename
+         slurp
+         to-pairs
+         (into {}) )
+    {}))
 
 (def base-env
   (into {} [
@@ -31,8 +33,7 @@
          (first))
     "development"))
 
-(def app-env-specific-filenames
-  (filter #(.exists (io/file %)) [(<< ".env.~{app-env}")]))
+(def app-env-specific-filenames [(<< ".env.~{app-env}")])
 
 (def app-env-specific-env
   (into {} (map load-env-file app-env-specific-filenames)))
