@@ -6,7 +6,11 @@
 (defn- to-pairs [rawstring]
   "converts a string containing the contents of a .env file into a list of pairs"
   (let [lines (str/split-lines rawstring)]
-    (map #(str/split % #"=" 2) lines)))
+    (->> lines
+         (map str/trim)
+         (remove empty?)
+         (remove #(str/starts-with? % "#"))
+         (map #(str/split % #"=")) )))
 
 (defn- load-env-file [filename]
   "loads an env file into a map"
