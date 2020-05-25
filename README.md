@@ -56,7 +56,7 @@ Notice how `SOME_VAR` is overriden.
 Add the dependency to you `project.clj`:
 
 ```clojure
-:dependencies [[lynxeyes/dotenv "1.0.2"]]
+:dependencies [[lynxeyes/dotenv "1.0.3"]]
 ```
 
 and `lein deps`!
