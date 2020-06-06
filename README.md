@@ -51,12 +51,31 @@ SOME_VAR=DotEnvDotDevValue
 
 Notice how `SOME_VAR` is overriden.
 
+## Supported env file formats
+
+dotenv.clj is quite permissive in how you declare your env vars within the env files.  
+The following declarations are all valid:
+
+```
+SOME=value
+  ANOTHER=different-value
+
+AND_HOW="about something else?"
+# COMMENTED_OUT="won't be loaded"
+export VERY_RELEVANT="thing of general use"
+
+IT_CAN = "even support spacing"
+ALSO_HANDLES="quotations \"well enough\""
+```
+
+Note that empty lines are also valid as they are simply ignored.
+
 ## Install
 
 Add the dependency to you `project.clj`:
 
 ```clojure
-:dependencies [[lynxeyes/dotenv "1.0.3"]]
+:dependencies [[lynxeyes/dotenv "1.1.0"]]
 ```
 
 and `lein deps`!

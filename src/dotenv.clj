@@ -3,14 +3,35 @@
              [clojure.java.io :as io]
              [clojure.core.strint :refer [<<]]))
 
+(defn- unquote-doublequoted-string [string]
+  (-> string
+      (str/replace #"^\"|\"$" "")
+      (str/replace #"\\\"" "\"")))
+
+(defn- unquote-singlequoted-string [string]
+  (-> string
+      (str/replace #"^'|'$" "")
+      (str/replace #"\\'" "'")))
+
+(defn- unquote-string [string]
+  (cond (str/starts-with? string "\"") (unquote-doublequoted-string string)
+        (str/starts-with? string "'")  (unquote-singlequoted-string string)
+        :else string))
+
 (defn- to-pairs [rawstring]
   "converts a string containing the contents of a .env file into a list of pairs"
-  (let [lines (str/split-lines rawstring)]
-    (->> lines
-         (map str/trim)
-         (remove empty?)
-         (remove #(str/starts-with? % "#"))
-         (map #(str/split % #"=")) )))
+  (->> rawstring
+       (str/split-lines)                             ; split input by linebreak
+       (map str/trim)                                ; trim heading or tailing spaces
+       (remove #(-> % empty?                         ; discard empty lines
+                      (str/starts-with? "#")))       ; discard commented lines
+       (map #(str/split % #"="))                     ; split by equal
+       (map #(let [[h & t] %]
+                  [(str/replace h #"export *" "")    ; handle "exports declarations"
+                   (str/join "=" t) ]))              ; join back values that got split
+       (map #(vec (->> % (map str/trim)              ; trim whitespaces on var and value
+                         (map unquote-string))))     ; unquote values
+       ))
 
 (defn- load-env-file [filename]
   "loads an env file into a map"
