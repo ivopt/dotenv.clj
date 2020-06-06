@@ -75,7 +75,7 @@ Note that empty lines are also valid as they are simply ignored.
 Add the dependency to you `project.clj`:
 
 ```clojure
-:dependencies [[lynxeyes/dotenv "1.0.3"]]
+:dependencies [[lynxeyes/dotenv "1.1.0"]]
 ```
 
 and `lein deps`!
