@@ -27,8 +27,8 @@
                       (str/starts-with? "#")))       ; discard commented lines
        (map #(str/split % #"="))                     ; split by equal
        (map #(let [[h & t] %]
-               [(str/replace h #"export *" "")       ; handle "exports declarations"
-                (str/join "=" t) ]))                 ; join back values that got split
+                  [(str/replace h #"export *" "")    ; handle "exports declarations"
+                   (str/join "=" t) ]))              ; join back values that got split
        (map #(vec (->> % (map str/trim)              ; trim whitespaces on var and value
                          (map unquote-string))))     ; unquote values
        ))
